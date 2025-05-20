@@ -9,9 +9,12 @@ A command-line tool to convert images to PDF file with optional sorting by image
 
 ## Table of Contents
 - [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
 - [Author](#author)
+
 
 
 ## Features
