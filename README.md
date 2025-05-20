@@ -5,7 +5,7 @@
 [![Java](https://img.shields.io/badge/Java-24-red.svg)](https://www.oracle.com/java/)
 [![GitHub issues](https://img.shields.io/github/issues/1M7md-CS/images-to-pdf)](https://github.com/1M7md-CS/images-to-pdf/issues)
 
-A command-line tool to convert images to PDF files with optional sorting by image name.
+A command-line tool to convert images to PDF file with optional sorting by image name.
 
 ## Table of Contents
 - [Features](#features)
@@ -57,17 +57,12 @@ Enter folder path: C:\Users\user\Desktop\imageFolder
 Output: Done. (PDF saved in folder: 'C:\Users\user\Desktop\imageFolder\output.pdf')
 ```
 
-- **With Sorting**: Images are sorted by numeric filename (e.g., 1.jpg, 2.png).
+- **With Sorting**: Images are sorted by numeric image name (e.g., 1.jpg, 2.png).
 - **Without Sorting**: Images are processed in default filesystem order.
 
 
-
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-
-
 ## Author
-
 Mohammad Hammad - [GitHub](https://github.com/1M7md-CS)
