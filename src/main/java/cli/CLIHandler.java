@@ -68,15 +68,18 @@ public abstract class CLIHandler {
 	private static void handleConvert(String choice){
 
 		try {
+
 			String folderPath = FolderUtils.getFolderPath(reader);
 			File folder = new File(folderPath);
+			System.out.print(ConsoleColors.OUTPUT_COLOR + "Please enter the name of PDF file: " + ConsoleColors.RESET);
+			String pdfName = reader.readLine();
 			File[] images = FolderUtils.getImagesFromFolder(folder);
 
 			if (choice.equalsIgnoreCase("withSorting")){
 				File[] sortedImages = ImageSorter.sortImages(images);
-				ImageToPdfConverter.convertToPDF(sortedImages, folderPath);
+				ImageToPdfConverter.convertToPDF(sortedImages, folderPath, pdfName);
 			}else if(choice.equalsIgnoreCase("withoutSorting")){
-				ImageToPdfConverter.convertToPDF(images, folderPath);
+				ImageToPdfConverter.convertToPDF(images, folderPath, pdfName);
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

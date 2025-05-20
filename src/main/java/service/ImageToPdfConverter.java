@@ -2,19 +2,25 @@ package service;
 
 import cli.ConsoleColors;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ImageToPdfConverter {
 
-	public static void convertToPDF(File[] images, String folderPath) {
+	public static void convertToPDF(File[] images, String folderPath, String pdfName) {
 		System.out.println(ConsoleColors.OUTPUT_COLOR + "Please Wait..." + ConsoleColors.RESET);
 
-		String outputPath = folderPath + File.separator + "output.pdf";
+		String outputPath = folderPath + File.separator + pdfName;
+		if (!pdfName.endsWith(".pdf")){
+			outputPath += ".pdf";
+		}
+
 		Document document = new Document(PageSize.A4, 10, 10, 10, 10);
 
 		try {
@@ -35,8 +41,8 @@ public class ImageToPdfConverter {
 				document.add(image);
 				document.newPage();
 			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (IOException | DocumentException e) {
+			System.out.println(ConsoleColors.ERROR_COLOR + e.getMessage() + ConsoleColors.RESET);
 		} finally {
 			document.close();
 		}
