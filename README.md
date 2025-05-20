@@ -13,7 +13,6 @@ A command-line tool to convert images to PDF files with optional sorting by imag
 - [License](#license)
 - [Author](#author)
 
----
 
 ## Features
 
@@ -21,13 +20,12 @@ A command-line tool to convert images to PDF files with optional sorting by imag
 - Option to sort images by numeric image name before conversion
 - Center images on A4-sized pages
 
----
+
 ## Prerequisites
 
 - Java 24 or higher installed
 - Apache Maven installed
 
----
 
 ## Installation
 
@@ -44,7 +42,7 @@ mvn clean compile
 # Run the application using Maven
 mvn exec:java
 ```
----
+
 
 ## Usage
 
@@ -62,13 +60,13 @@ Output: Done. (PDF saved in folder: 'C:\Users\user\Desktop\imageFolder\output.pd
 - **With Sorting**: Images are sorted by numeric filename (e.g., 1.jpg, 2.png).
 - **Without Sorting**: Images are processed in default filesystem order.
 
----
+
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+
 
 ## Author
 
