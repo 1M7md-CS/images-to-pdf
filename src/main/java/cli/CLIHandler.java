@@ -47,40 +47,14 @@ public abstract class CLIHandler {
 
 	}
 
-	private static void handleConvertWithSorting() {
-
-		try {
-			String folderPath = FolderUtils.getFolderPath(reader);
-			File folder = new File(folderPath);
-			File[] images = FolderUtils.getImagesFromFolder(folder);
-			File[] sortedImages = ImageSorter.sortImages(images);
-			ImageToPdfConverter.convertToPDF(sortedImages, folderPath);
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-
-	}
-
-	private static void handleConvertWithoutSorting() {
-
-		try {
-			String folderPath = FolderUtils.getFolderPath(reader);
-			File folder = new File(folderPath);
-			File[] images = FolderUtils.getImagesFromFolder(folder);
-			ImageToPdfConverter.convertToPDF(images, folderPath);
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-
-	}
 
 	private static void handleUserChoice(int choice) {
 
 		try {
 			switch (choice) {
 
-				case OPTION_CONVERT_WITH_SORTING -> handleConvertWithSorting();
-				case OPTION_CONVERT_WITHOUT_SORTING -> handleConvertWithoutSorting();
+				case OPTION_CONVERT_WITH_SORTING -> handleConvert("withSorting");
+				case OPTION_CONVERT_WITHOUT_SORTING -> handleConvert("withoutSorting");
 				case OPTION_HELP -> displayHelp();
 				case OPTION_EXIT -> isRunning = false;
 				default -> System.out.println(ConsoleColors.ERROR_COLOR + "Invalid option. Please enter a number from 1 to 4." + ConsoleColors.RESET);
@@ -89,6 +63,25 @@ public abstract class CLIHandler {
 		} catch (IllegalArgumentException e) {
 			System.out.println(ConsoleColors.ERROR_COLOR + e.getMessage() + ConsoleColors.RESET);
 		}
+	}
+
+	private static void handleConvert(String choice){
+
+		try {
+			String folderPath = FolderUtils.getFolderPath(reader);
+			File folder = new File(folderPath);
+			File[] images = FolderUtils.getImagesFromFolder(folder);
+
+			if (choice.equalsIgnoreCase("withSorting")){
+				File[] sortedImages = ImageSorter.sortImages(images);
+				ImageToPdfConverter.convertToPDF(sortedImages, folderPath);
+			}else if(choice.equalsIgnoreCase("withoutSorting")){
+				ImageToPdfConverter.convertToPDF(images, folderPath);
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	private static int getUserChoice() throws IOException {
