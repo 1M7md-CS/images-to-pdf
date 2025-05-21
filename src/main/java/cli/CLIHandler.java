@@ -1,13 +1,13 @@
 package cli;
 
-import service.ImageSorter;
-import service.ImageToPdfConverter;
-import util.FolderUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import service.ImageSorter;
+import service.ImageToPdfConverter;
+import util.FolderUtils;
 
 
 public abstract class CLIHandler {
@@ -47,6 +47,47 @@ public abstract class CLIHandler {
 
 	}
 
+	private static void displayMenu() {
+		String title = "Welcome to Images to PDF Converter";
+
+		String[] options = {
+				"1. Convert images to pdf with sorting",
+				"2. Convert images to pdf without sorting",
+				"3. Help",
+				"4. Exit"};
+
+		int longestLineLength = getLongestLineLength(title,options);
+		Frame.printMenuFrame(title,options,longestLineLength,2);
+	}
+
+	private static int getUserChoice() throws IOException {
+		int attempts = 0;
+
+		while (attempts < MAX_ATTEMPTS) {
+			System.out.print(ConsoleColors.INPUT_COLOR + "Choose an option (1-4): " + ConsoleColors.RESET);
+			attempts++;
+
+			try {
+				String input = reader.readLine().trim();
+				if (input.isEmpty()) {
+					System.out.println(ConsoleColors.ERROR_COLOR + "Input cannot be empty. Please enter a number from 1 to 4." + ConsoleColors.RESET);
+					continue;
+				}
+
+				int choice = Integer.parseInt(input);
+
+				if (choice >= 1 && choice <= 4) {
+					return choice;
+				} else {
+					System.out.println(ConsoleColors.ERROR_COLOR + "Invalid option. Please enter a number from 1 to 4." + ConsoleColors.RESET);
+				}
+
+			} catch (NumberFormatException | IOException e) {
+				System.out.println(ConsoleColors.ERROR_COLOR + "Invalid input. Please enter a valid number." + ConsoleColors.RESET);
+			}
+		}
+		throw new IOException(ConsoleColors.ERROR_COLOR + "\nNo valid input provided after '" + MAX_ATTEMPTS + "' attempts." + ConsoleColors.RESET);
+	}
 
 	private static void handleUserChoice(int choice) {
 
@@ -87,132 +128,56 @@ public abstract class CLIHandler {
 
 	}
 
-	private static int getUserChoice() throws IOException {
-		int attempts = 0;
-
-		while (attempts < MAX_ATTEMPTS) {
-			System.out.print(ConsoleColors.INPUT_COLOR + "Choose an option (1-4): " + ConsoleColors.RESET);
-			attempts++;
-
-			try {
-				String input = reader.readLine().trim();
-				if (input.isEmpty()) {
-					System.out.println(ConsoleColors.ERROR_COLOR + "Input cannot be empty. Please enter a number from 1 to 4." + ConsoleColors.RESET);
-					continue;
-				}
-
-				int choice = Integer.parseInt(input);
-
-				if (choice >= 1 && choice <= 4) {
-					return choice;
-				} else {
-					System.out.println(ConsoleColors.ERROR_COLOR + "Invalid option. Please enter a number from 1 to 4." + ConsoleColors.RESET);
-				}
-
-			} catch (NumberFormatException | IOException e) {
-				System.out.println(ConsoleColors.ERROR_COLOR + "Invalid input. Please enter a valid number." + ConsoleColors.RESET);
-			}
-		}
-		throw new IOException(ConsoleColors.ERROR_COLOR + "\nNo valid input provided after '" + MAX_ATTEMPTS + "' attempts." + ConsoleColors.RESET);
-	}
-
-	private static void displayMenu() {
-		String title = "Welcome to Images to PDF Converter";
-
-		String[] options = {
-				"1. Convert images to pdf with sorting",
-				"2. Convert images to pdf without sorting",
-				"3. Help",
-				"4. Exit"};
-
-		int width = title.length();
-		for (String opt : options) {
-			width = Math.max(width, opt.length());
-		}
-
-		printFrame(title, options, width);
-	}
-
 	private static void displayHelp() {
 
 		String title = "Help - Images to PDF Converter";
 
 		String[] lines = {
-						   ConsoleColors.HELP_TEXT_COLOR + "This tool converts images to a PDF file.",
-						   "",
-						   "Options:",
-						   "1. Convert with sorting: Sorts images by numeric image name (e.g., 1.jpg, 2.png).",
-						   "2. Convert without sorting: Uses images in default order.",
-						   "3. Help: Displays this help message.",
-						   "4. Exit: Closes the application.",
-						   "",
-						   "Usage:",
-						   "- Enter a valid folder path containing images.",
-						   "- Supported formats: jpg, jpeg, png, gif, bmp, tiff, jfif, heic.",
-						   "- For sorting, use numeric image names (e.g., 1.jpg, 2.jpg).",
-						   "- Output PDF is saved as 'output.pdf' in the input folder." + ConsoleColors.RESET
+				"This tool converts images to a PDF file.",
+				"",
+				"Options:",
+				"1. Convert with sorting: Sorts images by numeric image name (e.g., 1.jpg, 2.png).",
+				"2. Convert without sorting: Uses images in default order.",
+				"3. Help: Displays this help message.",
+				"4. Exit: Closes the application.",
+				"",
+				"Usage:",
+				"- Enter a valid folder path containing images.",
+				"- Supported formats: jpg, jpeg, png, gif, bmp, tiff, jfif, heic.",
+				"- For sorting, use numeric image names (e.g., 1.jpg, 2.jpg).",
+				"- Output PDF is saved as 'output.pdf' in the input folder."
 		};
 
-		int maxLen = title.length();
-		for (String line : lines) {
-			maxLen = Math.max(maxLen, line.replaceAll("\u001B\\[[;\\d]*m", "").length());
-		}
-		maxLen = Math.max(maxLen, 40);
+		int longestLineLength = getLongestLineLength(title,lines);
+		Frame.printMenuFrame(title,lines,longestLineLength,1);
 
-		System.out.println(ConsoleColors.FRAME_COLOR + "┌" + "─".repeat(maxLen + 4) + "┐" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "│ " + ConsoleColors.HELP_TITLE_COLOR
-													 + centerText(title, maxLen + 2) + ConsoleColors.RESET
-													 + " " + ConsoleColors.FRAME_COLOR + "│" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "├" + "─".repeat(maxLen + 4) + "┤" + ConsoleColors.RESET);
 
-		for (String line : lines) {
-			String plainLine = line.replaceAll("\u001B\\[[;\\d]*m", "");
-			System.out.println(ConsoleColors.FRAME_COLOR + "│  "
-							 + ConsoleColors.HELP_TEXT_COLOR + line
-							 + ConsoleColors.RESET + " ".repeat(maxLen - plainLine.length())
-							 + "  " + ConsoleColors.FRAME_COLOR + "│" + ConsoleColors.RESET);
-		}
-
-		System.out.println(ConsoleColors.FRAME_COLOR + "└" + "─".repeat(maxLen + 4) + "┘" + ConsoleColors.RESET);
 	}
 
 	private static void displayExitMessage() {
-		String message = "Thank you for using the Images to PDF Converter.";
-		int width = message.length();
+		String exitMessage = "Thank you for using the Images to PDF Converter.";
+		Frame.printExitFrame(exitMessage,6);
 
-		System.out.println(ConsoleColors.FRAME_COLOR + "╔" + "═".repeat(width + 4) + "╗" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "║  " + ConsoleColors.EXIT_COLOR + centerText(message, width)
-						 + ConsoleColors.FRAME_COLOR + "  ║" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "╚" + "═".repeat(width + 4) + "╝" + ConsoleColors.RESET);
 	}
 
-	private static void printFrame(String title, String[] options, int width) {
-		System.out.println(ConsoleColors.FRAME_COLOR + "╔" + "═".repeat(width + 6) + "╗" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "║" + ConsoleColors.RESET + "   "
-						 + ConsoleColors.TITLE_COLOR + centerText(title, width) + ConsoleColors.RESET + "   "
-						 + ConsoleColors.FRAME_COLOR + "║" + ConsoleColors.RESET);
-		System.out.println(ConsoleColors.FRAME_COLOR + "╠" + "═".repeat(width + 6) + "╣" + ConsoleColors.RESET);
+	private static int getLongestLineLength(String title, String[] lines){
 
-		for (String opt : options) {
-			System.out.println(ConsoleColors.FRAME_COLOR + "║" + ConsoleColors.RESET + "   "
-							 + ConsoleColors.OPTION_COLOR + opt + ConsoleColors.RESET
-							 + " ".repeat(width - opt.length()) + "   "
-							 + ConsoleColors.FRAME_COLOR + "║" + ConsoleColors.RESET);
+		int longestLineLength = title.length();
+
+		for (String line : lines){
+			longestLineLength = Math.max(longestLineLength, line.length());
 		}
 
-		System.out.println(ConsoleColors.FRAME_COLOR + "╚" + "═".repeat(width + 6) + "╝" + ConsoleColors.RESET);
-	}
+		return longestLineLength;
 
-	private static String centerText(String text, int width) {
-		if (text.length() >= width) {
-			return text;
-		}
-		int padding = (width - text.length()) / 2;
-		return " ".repeat(padding) + text + " ".repeat(width - padding - text.length());
 	}
 
 	private static void promptEnterKey() {
 		try {
+			while (System.in.available() > 0) {
+				System.in.read();
+			}
+
 			System.out.print(ConsoleColors.INPUT_COLOR + "Press ENTER to continue..." + ConsoleColors.RESET);
 			reader.readLine();
 		} catch (IOException e) {
