@@ -57,7 +57,8 @@ Choose an option:
 4. Exit
 
 Enter folder path: C:\Users\user\Desktop\imageFolder
-Output: Done. (PDF saved in folder: 'C:\Users\user\Desktop\imageFolder\output.pdf')
+Enter the name of PDF file: myPDF
+Output: Done. (PDF saved in folder: 'C:\Users\user\Desktop\imageFolder\myPDF.pdf')
 ```
 
 - **With Sorting**: Images are sorted by numeric image name (e.g., 1.jpg, 2.png).
